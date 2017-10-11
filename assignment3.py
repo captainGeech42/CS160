@@ -1,38 +1,28 @@
 decNum = int(input("Decimal Number?\n"))
 
-if (decNum > 255 or decNum < 0):
-	print("Invalid number given. Please enter an integer between 0 and 255")
-else:
-	b7 = decNum // 128
-	if (b7 == 1):
-		decNum = decNum - 128
-	
-	b6 = decNum // 64
-	if (b6 == 1):
-		decNum = decNum - 64
+b7 = decNum // 128
+decNum = decNum - (b7 * 128)
 
-	b5 = decNum // 32
-	if (b5 == 1):
-		decNum = decNum - 32
+b6 = decNum // 64
+decNum = decNum - (b6 * 64)
 
-	b4 = decNum // 16
-	if (b4 == 1):
-		decNum = decNum - 16
+b5 = decNum // 32
+decNum = decNum - (b5 * 32)
 
-	b3 = decNum // 8
-	if (b3 == 1):
-		decNum = decNum - 8
+b4 = decNum // 16
+decNum = decNum - (b4 * 16)
 
-	b2 = decNum // 4
-	if (b2 == 1):
-		decNum = decNum - 4
+b3 = decNum // 8
+decNum = decNum - (b3 * 8)
 
-	b1 = decNum // 2
-	if (b1 == 1):
-		decNum = decNum - 2
+b2 = decNum // 4
+decNum = decNum - (b2 * 4)
 
-	b0 = decNum // 1
+b1 = decNum // 2
+decNum = decNum - (b1 * 2)
 
-	num = str(b7) + str(b6) + str(b5) + str(b4) + str(b3) + str(b2) + str(b1) + str(b0)
+b0 = decNum // 1
 
-	print("Binary number is " + num)
+num = str(b7) + str(b6) + str(b5) + str(b4) + str(b3) + str(b2) + str(b1) + str(b0)
+
+print("Binary number is " + num)

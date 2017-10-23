@@ -1,33 +1,47 @@
-import math
-
-# choose mode
 firstRun = True
 while True:
+	# choose the mod
 	mode = input("Please select 'scientific' or 'programmer' mode: " if firstRun else "Please select next mode, or 'exit' to quit the calculator: ")
-	if (mode == "scientific"):
-		#scientific mode
 
-		operation = input("Please pick an operator (+, -, *, /, or **): ")
-		num1 = float(input("Please enter the first operand: " if operation != "**" else "Please enter the base: "))
-		num2 = float(input("Please enter the second operand: " if operation != "**" else "Please enter the exponent: "))
-		
-		if (operation == "+"):
-			print("The sum is " + str(num1 + num2))
-		elif (operation == "-"):
-			print("The difference is " + str(num1 - num2))
-		elif (operation == "*"):
-			print("The product is " + str(num1 * num2))
-		elif (operation == "/"):
-			if (num2 == 0):
-				print("You can not divide by zero.")
-				continue
-			print("The quotient is " + str(num1 / num2))
-		elif (operation == "**"):
-			print("The result of the exponentiation is " + str(num1**num2))
-		else:
-			print("Please enter a valid operator")
+	if (mode == "scientific"):
+		# scientific mode
+
+		validOperations = ["+", "-", "*", "/", "**"]
+		chosenOperation = ""
+		exponent = False
+
+		chosenOperation = input("Please pick an operation (+, -, *, /, **): ")
+
+		while chosenOperation not in validOperations:
+			chosenOperation = input("Please choose a valid operation: ")
+
+		if chosenOperation == "**":
+			exponent = True
+
+		try:
+			num1 = float(input("Please enter the first operand: " if not exponent else "Please enter the base: "))
+			num2 = float(input("Please enter the second operand: " if not exponent else "Please enter the exponent: "))
+			
+			if (chosenOperation == "+"):
+				print("The sum is " + str(num1 + num2))
+			elif (chosenOperation == "-"):
+				print("The difference is " + str(num1 - num2))
+			elif (chosenOperation == "*"):
+				print("The product is " + str(num1 * num2))
+			elif (chosenOperation == "/"):
+				if (num2 == 0):
+					print("You can not divide by zero.")
+					continue
+				print("The quotient is " + str(num1 / num2))
+			elif (chosenOperation == "**"):
+				print("The result of the exponentiation is " + str(num1**num2))
+			else:
+				print("Please enter a valid operator")
+		except ValueError:
+			print("Please enter a valid float for " + ("each operand" if not exponent else "the base/exponent"))
+
 	elif (mode == "programmer"):
-		#programmer mode
+		# programmer mode
 		
 		decimalNumber = 0
 		try:
@@ -36,12 +50,9 @@ while True:
 				raise ValueError()
 			numBits = 1
 			tempDiv = decimalNumber
-			while True:
-				if (tempDiv // 2 > 0):
-					numBits += 1
-					tempDiv = tempDiv // 2
-				else:
-					break
+			while tempDiv // 2 > 0:
+				numBits += 1
+				tempDiv = tempDiv // 2
 			
 			binaryNumber = ""
 			for bit in range(numBits - 1, -1, -1):

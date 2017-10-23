@@ -45,7 +45,7 @@ while True:
 			
 			binaryNumber = ""
 			for bit in range(numBits - 1, -1, -1):
-				test = decimalNumber - 2**bit
+				test = decimalNumber - 2 ** bit
 				if (test >= 0):
 					binaryNumber += "1"
 					decimalNumber = test

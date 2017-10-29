@@ -25,8 +25,6 @@ def main():
 	
 		if firstRun:
 			firstRun = False
-		
-		# window.mainloop()
 
 def star(x, y):
 	clearScreen()
@@ -64,7 +62,6 @@ def name(x, y):
 	turtle.forward(a)
 	turtle.right(180 - 40)
 	turtle.forward(a)
-	
 	turtle.penup()	
 	line = 2 * (((a / 2) * math.sin(math.radians(20))) / math.sin(math.radians(90)))
 	turtle.right(180)
@@ -147,7 +144,7 @@ def name(x, y):
 	turtle.left(90)
 	turtle.forward(150 // 2)
 	diagonal = math.sqrt((75**2) + (37.5**2))
-	angle = math.degrees(math.asin((150 / 4)/diagonal))
+	angle = math.degrees(math.asin((150 / 4) / diagonal))
 	turtle.left(angle)
 	turtle.forward(diagonal)
 

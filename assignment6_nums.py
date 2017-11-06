@@ -1,5 +1,3 @@
-import pdb
-
 def main():
 	input1 = getValidInput("Please enter the first list of integers, seperated by a comma: ")
 	input2 = getValidInput("Please enter the second list of integers, seperated by a comma: ")

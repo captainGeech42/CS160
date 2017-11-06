@@ -1,5 +1,7 @@
 def getValidInput():
 	string = input("Please enter a list of names, seperated by a comma: ")
+	if (len(string) == 0):
+		return getValidInput()
 	for x in string:
 		if (x < "A" and x != " " and x != ","):
 			return getValidInput()

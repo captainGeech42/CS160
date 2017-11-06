@@ -12,12 +12,25 @@ def getValidInput():
 
 def printFreq(counter):
 	# for letter in counter:
-	left = len(counter) - 1
-	while (left >= 0):
-		print(counter[left][0] + " - " + str(counter[left][1]), end = "")
-		if (left != 0):
-			print(", ", end = "")
-		left -= 1
+	length = len(counter)
+	for x in range(length - 1):
+		print(counter[x][0] + " - " + str(counter[x][1]), end = ", ")
+	print(counter[length - 1][0] + " - " + str(counter[length - 1][1]))
+
+def sortFreqList(freqList):
+	while (not isFreqListSorted(freqList)):
+		for x in range(len(freqList) - 1):
+			if (freqList[x][0] > freqList[x + 1][0]):
+				temp = freqList[x]
+				freqList[x] = freqList[x + 1]
+				freqList[x + 1] = temp
+	return freqList
+
+def isFreqListSorted(freqList):
+	for x in range(len(freqList) - 1):
+		if (freqList[x][0] > freqList[x + 1][0]):
+			return False
+	return True
 
 def main():
 	names = getValidInput().upper()
@@ -41,6 +54,6 @@ def main():
 
 		counter.append([x, 1])
 
-	printFreq(counter)
+	printFreq(sortFreqList(counter))
 
 main()

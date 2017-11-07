@@ -10,7 +10,9 @@ def main():
 		elif (function == "isDecimal"):
 			printFuncReturn(isDecimal(getStringArgument()))
 		elif (function == "inBound"):
-			print("in progress...")
+			position = input("Please provide a position value: ")
+			maxValue = input("Please provide a maximum value: ")
+			printFuncReturn(inBound(position, maxValue))
 		elif (function == "capitalsPresent"):
 			printFuncReturn(capitalsPresent(getStringArgument()))
 		elif (function == "numbersPresent"):
@@ -40,10 +42,6 @@ def isPositive(string):
 		if (char < "0" or char > "9"):
 			return False
 
-	# check for length of 1 and string is "0"
-	if (string == "0"):
-		return False
-
 	return True
 
 def isDecimal(string):
@@ -54,11 +52,12 @@ def isDecimal(string):
 
 	return True
 
-def inBound():
+def inBound(position, maxValue):
 	# wut
+	if (not isPositive(position) or not isPositive(maxValue)):
+		return False
 	
-
-	return True
+	return position <= maxValue
 
 def capitalsPresent(string):
 	# check each character if it is between A and Z

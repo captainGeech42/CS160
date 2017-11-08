@@ -10,8 +10,8 @@ def main():
 		elif (function == "isDecimal"):
 			printFuncReturn(isDecimal(getStringArgument()))
 		elif (function == "inBound"):
-			position = input("Please provide a position value: ")
-			maxValue = input("Please provide a maximum value: ")
+			position = int(input("Please provide a position value: "))
+			maxValue = int(input("Please provide a maximum value: "))
 			printFuncReturn(inBound(position, maxValue))
 		elif (function == "capitalsPresent"):
 			printFuncReturn(capitalsPresent(getStringArgument()))
@@ -29,6 +29,7 @@ def main():
 			exit()
 		else:
 			print("An unrecognized function was given.")
+			function = ""
 
 def getStringArgument():
 	return input("Please enter the string argument: ")
@@ -53,10 +54,10 @@ def isDecimal(string):
 	return True
 
 def inBound(position, maxValue):
-	# wut
-	if (not isPositive(position) or not isPositive(maxValue)):
+	# check if position is between 0 and maxValue
+	if (position < 0 or maxValue < 0):
 		return False
-	
+
 	return position <= maxValue
 
 def capitalsPresent(string):

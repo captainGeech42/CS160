@@ -1,6 +1,7 @@
 '''
 TODO: Functions that do not currently support a NxN board:
  - getGameCoordinates
+ - printBoard
 
 INFO:
  - X = black
@@ -21,7 +22,8 @@ def main():
 	while (not isGameOver(board)):
 		printBoard(board)
 
-		row, col = 0
+		row = 0
+		col = 0
 		while True:
 			row, col = getGameCoordinates(p1Name if p1Turn else p2Name)
 			if (isValidMove(board, row, col)):
@@ -249,7 +251,8 @@ def getGameCoordinates(player):
 			continue
 		break
 	
-	return (ord(column) - 97, int(row))
+	# return (ord(column) - 97, int(row))
+	return (int(row) - 1, ord(column) - 97)
 
 def getWinner(board):
 	whiteCounter = 0
@@ -274,10 +277,13 @@ def isGameOver(board):
 	for x in range(n):
 		for y in range(n):
 			if (isValidMove(board, x, y)):
-				return True
-	return False
+				return False
+	return True
 
 def isValidMove(board, row, col):
+	if (board[row][col] != " "):
+		return False
+
 	if (checkLeft(board, col, row) or
 		checkUpLeft(board, col, row) or
 		checkUp(board, col, row) or
@@ -289,14 +295,18 @@ def isValidMove(board, row, col):
 		return True
 
 def printBoard(board):
+	# NOTE: This function does not support an NxN board
 	n = len(board)
-	divider = "-" * (n + (2 * n) + n + 1)
+	divider = "  " + ("-" * (n + (2 * n) + n + 1))
+	print("    a   b   c   d   e   f   g   h")
 	print(divider)
+	label = 1
 	for row in board:
-		print("| ", end = '')
+		print(str(label) + " | ", end = '')
 		for item in row:
 			print(item, end = " | ")
 		print()
 		print(divider)
+		label += 1
 
 main()

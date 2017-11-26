@@ -1,35 +1,4 @@
-def main():
-	function = ""
-	while True:
-		string = input("Please enter the name of the function to be tested (in the correct casing)" + (": " if function == "" else ", press <enter> to continue testing the previous function (" + function + "), or 'exit': "))
-		if (string != ""):
-			function = string
-
-		if (function == "isPositive"):
-			printFuncReturn(isPositive(getStringArgument()))
-		elif (function == "isDecimal"):
-			printFuncReturn(isDecimal(getStringArgument()))
-		elif (function == "inBound"):
-			position = int(input("Please provide a position value: "))
-			maxValue = int(input("Please provide a maximum value: "))
-			printFuncReturn(inBound(position, maxValue))
-		elif (function == "capitalsPresent"):
-			printFuncReturn(capitalsPresent(getStringArgument()))
-		elif (function == "numbersPresent"):
-			printFuncReturn(numbersPresent(getStringArgument()))
-		elif (function == "isEven"):
-			printFuncReturn(isEven(getStringArgument()))
-		elif (function == "isOdd"):
-			printFuncReturn(isOdd(getStringArgument()))
-		elif (function == "isCorrectLength"):
-			string = input("Please enter the string argument: ")
-			lenght = input("Please enter the length argument: ")
-			printFuncReturn(isCorrectLength(string, length))
-		elif (function == "exit"):
-			exit()
-		else:
-			print("An unrecognized function was given.")
-			function = ""
+import os
 
 def getStringArgument():
 	return input("Please enter the string argument: ")
@@ -50,6 +19,22 @@ def isDecimal(string):
 	for char in string:
 		if ((char < "0" and (char != "." and char != "-")) or char > "9"):
 			return False
+
+	# check for multiple .
+	dot = 0
+	for char in string:
+		if (char == "."):
+			dot += 1
+	if (dot != 1):
+		return False
+
+	# check for multiple -
+	dash = 0
+	for char in string:
+		if (char == "-"):
+			dash += 1
+	if (dash > 1):
+		return False
 
 	return True
 
@@ -104,10 +89,7 @@ def isOdd(string):
 
 	return False
 
-def isCorectLength(string, length):
-	if (not isPositive(length)):
-		return False
-	
+def isCorectLength(string, length):	
 	# for loop to get length of the string
 	strLength = 0
 	for char in string:
@@ -115,4 +97,38 @@ def isCorectLength(string, length):
 
 	return strLength == length
 
-main()
+if (__name__ == "__main__"):
+	function = ""
+	while True:
+		string = input("Please enter the name of the function to be tested (in the correct casing)" + (": " if function == "" else ", press <enter> to continue testing the previous function (" + function + "), 'clear', to clear the screen, or 'exit': "))
+		if (string != ""):
+			function = string
+
+		if (function == "isPositive"):
+			printFuncReturn(isPositive(getStringArgument()))
+		elif (function == "isDecimal"):
+			printFuncReturn(isDecimal(getStringArgument()))
+		elif (function == "inBound"):
+			position = int(input("Please provide a position value: "))
+			maxValue = int(input("Please provide a maximum value: "))
+			printFuncReturn(inBound(position, maxValue))
+		elif (function == "capitalsPresent"):
+			printFuncReturn(capitalsPresent(getStringArgument()))
+		elif (function == "numbersPresent"):
+			printFuncReturn(numbersPresent(getStringArgument()))
+		elif (function == "isEven"):
+			printFuncReturn(isEven(getStringArgument()))
+		elif (function == "isOdd"):
+			printFuncReturn(isOdd(getStringArgument()))
+		elif (function == "isCorrectLength"):
+			string = input("Please enter the string argument: ")
+			length = int(input("Please enter the length value: "))
+			printFuncReturn(isCorrectLength(string, length))
+		elif (function == "clear"):
+			os.system("clear")
+			function = ""
+		elif (function == "exit"):
+			exit()
+		else:
+			print("An unrecognized function was given.")
+			function = ""

@@ -4,8 +4,8 @@ TODO: Functions that do not currently support a NxN board:
  - printBoard
 
 INFO:
- - X = black
- - O = white
+ - X = black = player1
+ - O = white = player2
  - board is accessed with board[row][col]
 '''
 
@@ -21,24 +21,32 @@ def main():
 
 	p1Turn = True
 
+	p1CantPlay = False
+	p2CantPlay = False
+
 	# TODO this needs to check if there is a valid move for white or a valid move for black
 	# if there are no more valid moves, the game is over
 	# if the player doesn't have a valid move, they must forfeit their turn, so just skip them
-	while (not isGameOver(board)):
+	while (not p1CantPlay and not p2CantPlay):
 		printBoard(board)
 
 		row = 0
 		col = 0
 		while True:
 			row, col = getGameCoordinates(p1Name if p1Turn else p2Name)
-			if (isValidMove(board, row, col)):
+			
+			if (isValidMove(board, row, col, "X" if p1Turn else "O")):
 				break
 			print("The coordinates are invalid.")
 
 		board[row][col] = "X" if p1Turn else "O"
 
-		pdb.set_trace()
-		flipPieces(board, row, col)
+		flipPieces(board, row, col, ("X" if p1Turn else "O"))
+
+		if (p1Turn):
+			p1CantPlay = isGameOver(board, "X")
+		else:
+			p2CantPlay = isGameOver(board, "O")
 
 		p1Turn = not p1Turn
 
@@ -54,15 +62,14 @@ def main():
 	else:
 		print("rip idek")
 
-def checkDown(board, row, col):
+def checkDown(board, row, col, origin):
 	n = len(board)
-	origin = board[row][col]
 	if (row == n - 1):
 		return False
 	char = board[row + 1][col]
 	if (char == origin or char == " "):
 		return False
-	for x in range(row + 2, n - row):
+	for x in range(row + 1, n - row):
 		char = board[x][col]
 		if (char == " "):
 			return False
@@ -70,10 +77,9 @@ def checkDown(board, row, col):
 			return True
 	return False
 
-def checkDownLeft(board, row, col):
+def checkDownLeft(board, row, col, origin):
 	# subtract from the column, add to the row
 	n = len(board)
-	origin = board[row][col]
 	if (row == n - 1 or col == 0):
 		return False
 	char = board[row + 1][col - 1]
@@ -87,10 +93,9 @@ def checkDownLeft(board, row, col):
 			return True
 	return False
 
-def checkDownRight(board, row, col):
+def checkDownRight(board, row, col, origin):
 	# add to the column and the row
 	n = len(board)
-	origin = board[row][col]
 	if (row == n - 1 or col == n - 1):
 		return False
 	char = board[row + 1][col + 1]
@@ -104,9 +109,8 @@ def checkDownRight(board, row, col):
 			return True
 	return False
 
-def checkLeft(board, row, col):
+def checkLeft(board, row, col, origin):
 	n = len(board)
-	origin = board[row][col]
 	if (col == 0):
 		return False
 	char = board[row][col - 1]
@@ -120,9 +124,8 @@ def checkLeft(board, row, col):
 			return True
 	return False
 
-def checkRight(board, row, col):
+def checkRight(board, row, col, origin):
 	n = len(board)
-	origin = board[row][col]
 	if (col == n - 1):
 		return False
 	char = board[row][col + 1]
@@ -136,26 +139,24 @@ def checkRight(board, row, col):
 			return True
 	return False
 
-def checkUp(board, row, col):
+def checkUp(board, row, col, origin):
 	n = len(board)
-	origin = board[row][col]
 	if (row == 0):
 		return False
 	char = board[row - 1][col]
 	if (char == origin or char == " "):
 		return False
-	for x in range(row - 2, n - row, -1):
+	for x in range(row - 1, 0, -1):
 		char = board[x][col]
 		if (char == " "):
 			return False
-		if (char != origin and char != " "):
+		if (char == origin):
 			return True
 	return False
 
-def checkUpLeft(board, row, col):
+def checkUpLeft(board, row, col, origin):
 	# subtract from the column and the row
 	n = len(board)
-	origin = board[row][col]
 	if (row == 0 or col == 0):
 		return False
 	char = board[row - 1][col - 1]
@@ -169,10 +170,9 @@ def checkUpLeft(board, row, col):
 			return True
 	return False
 
-def checkUpRight(board, row, col):
+def checkUpRight(board, row, col, origin):
 	# add to the column, subtract from the row
 	n = len(board)
-	origin = board[row][col]
 	if (col == n - 1 or row == 0):
 		return False
 	char = board[row - 1][col + 1]
@@ -186,55 +186,54 @@ def checkUpRight(board, row, col):
 			return True
 	return False
 
-def flipPieces(board, row, col):
+def flipPieces(board, row, col, origin):
 	n = len(board)
-	origin = board[row][col]
 
-	if (checkDown(board, row, col)):
+	if (checkDown(board, row, col, origin)):
 		inc = 1
-		while (row + inc < n and board[row + inc][col] != origin):
+		while (row + inc < n and board[row + inc][col] != origin and board[row + inc][col] != " "):
 			board[row + inc][col] = origin
 			inc += 1
 
-	if (checkUp(board, row, col)):
+	if (checkUp(board, row, col, origin)):
 		inc = 1
-		while (row - inc >= 0 and board[row - inc][col] != origin):
+		while (row - inc >= 0 and board[row - inc][col] != origin and board[row - inc][col] != " "):
 			board[row - inc][col] = origin
 			inc += 1
 
-	if (checkRight(board, row, col)):
+	if (checkRight(board, row, col, origin)):
 		inc = 1
-		while (col + inc < n and board[row][col + inc] != origin):
+		while (col + inc < n and board[row][col + inc] != origin and board[row][col + inc] != " "):
 			board[row][col + inc] = origin
 			inc += 1
 
-	if (checkLeft(board, row, col)):
+	if (checkLeft(board, row, col, origin)):
 		inc = 1
-		while (col - inc >= 0 and board[row][col - inc] != origin):
+		while (col - inc >= 0 and board[row][col - inc] != origin and board[row][col - inc] != " "):
 			board[row][col - inc] = origin
 			inc += 1
 
-	if (checkDownLeft(board, row, col)):
+	if (checkDownLeft(board, row, col, origin)):
 		inc = 1
-		while (row + inc < n and col - inc >= 0 and board[row + inc][col - inc] != origin):
+		while (row + inc < n and col - inc >= 0 and board[row + inc][col - inc] != origin and board[row + inc][col - inc] != " "):
 			board[row + inc][col - inc] = origin
 			inc += 1
 
-	if (checkUpLeft(board, row, col)):
+	if (checkUpLeft(board, row, col, origin)):
 		inc = 1
-		while (row - inc >= 0 and col - inc >= 0 and board[row - inc][col - inc] != origin):
+		while (row - inc >= 0 and col - inc >= 0 and board[row - inc][col - inc] != origin and board[row - inc][col - inc] != " "):
 			board[row - inc][col - 1] = origin
 			inc += 1
 
-	if (checkDownRight(board, row, col)):
+	if (checkDownRight(board, row, col, origin)):
 		inc = 1
-		while (row + inc < n and col + inc < n and board[row + inc][col + inc] != origin):
+		while (row + inc < n and col + inc < n and board[row + inc][col + inc] != origin and board[row + inc][col + inc] != " "):
 			board[row + 1][col + inc] = origin
 			inc += 1
 
-	if (checkUpRight(board, row, col)):
+	if (checkUpRight(board, row, col, origin)):
 		inc = 1
-		while (row - inc >= 0 and col + inc < n and board[row - inc][col + inc] != origin):
+		while (row - inc >= 0 and col + inc < n and board[row - inc][col + inc] != origin and board[row - inc][col + inc] != " "):
 			board[row - inc][col + inc] = origin
 			inc += 1
 
@@ -294,30 +293,30 @@ def getWinner(board):
 	else:
 		return "black"
 
-def isGameOver(board):
+def isGameOver(board, piece):
 	n = len(board)
 	for x in range(n):
 		for y in range(n):
-			if (isValidMove(board, x, y)):
+			if (isValidMove(board, x, y, piece)):
 				return False
 	return True
 
-def isValidMove(board, row, col):
+def isValidMove(board, row, col, piece):
 	if (board[row][col] != " "):
 		return False
 
-	if (checkLeft(board, col, row) or
-		checkUpLeft(board, col, row) or
-		checkUp(board, col, row) or
-		checkUpRight(board, col, row) or
-		checkRight(board, col, row) or
-		checkDownRight(board, col, row) or
-		checkDown(board, col, row) or
-		checkDownLeft(board, col, row)):
+	if (checkLeft(board, row, col, piece) or
+		checkUpLeft(board, row, col, piece) or
+		checkUp(board, row, col, piece) or
+		checkUpRight(board, row, col, piece) or
+		checkRight(board, row, col, piece) or
+		checkDownRight(board, row, col, piece) or
+		checkDown(board, row, col, piece) or
+		checkDownLeft(board, row, col, piece)):
 		return True
 
 def printBoard(board):
-	# NOTE: This function does not support an NxN board
+	# NOTE: This function does not support an N x N board
 	n = len(board)
 	divider = "  " + ("-" * (n + (2 * n) + n + 1))
 	print("    a   b   c   d   e   f   g   h")

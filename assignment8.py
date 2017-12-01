@@ -9,58 +9,81 @@ INFO:
  - board is accessed with board[row][col]
 '''
 
-import pdb
+import sys
 
 def main():
-	board = generateBoard(8)
-	p1Name = input("Please enter Player 1's name: ")
-	p2Name = input("Please enter Player 2's name: ")
+	if (len(sys.argv) != 2):
+		print("Too many/little command line arguments. Syntax is: assignment8.py [board size]")
+		exit()
 
-	print("Welcome to Othello.")
-	print(p1Name + " will be X, and " + p2Name + " will be O")
+	boardSize = sys.argv[1]
+	if (boardSize != "8"):
+		print("An invalid board size was received. Exiting...")
+		exit()
 
-	p1Turn = True
+	boardSize = int(boardSize)
 
-	p1CantPlay = False
-	p2CantPlay = False
+	winCounter = [0, 0] #p1, p2
 
-	# TODO this needs to check if there is a valid move for white or a valid move for black
-	# if there are no more valid moves, the game is over
-	# if the player doesn't have a valid move, they must forfeit their turn, so just skip them
-	while (not p1CantPlay and not p2CantPlay):
+	while True:
+		board = generateBoard(boardSize)
+		p1Name = input("Please enter Player 1's name: ")
+		p2Name = input("Please enter Player 2's name: ")
+	
+		print("Welcome to Othello.")
+		print(p1Name + " will be X, and " + p2Name + " will be O")
+	
+		p1Turn = True
+	
+		p1CantPlay = False
+		p2CantPlay = False
+	
+		while (not p1CantPlay and not p2CantPlay):
+			printBoard(board)
+	
+			row = 0
+			col = 0
+			while True:
+				row, col = getGameCoordinates(p1Name if p1Turn else p2Name)
+				
+				if (isValidMove(board, row, col, "X" if p1Turn else "O")):
+					break
+				print("The coordinates are invalid.")
+	
+			board[row][col] = "X" if p1Turn else "O"
+	
+			flipPieces(board, row, col, ("X" if p1Turn else "O"))
+	
+			if (p1Turn):
+				p1CantPlay = isGameOver(board, "X")
+			else:
+				p2CantPlay = isGameOver(board, "O")
+	
+			p1Turn = not p1Turn
+	
 		printBoard(board)
-
-		row = 0
-		col = 0
-		while True:
-			row, col = getGameCoordinates(p1Name if p1Turn else p2Name)
-			
-			if (isValidMove(board, row, col, "X" if p1Turn else "O")):
-				break
-			print("The coordinates are invalid.")
-
-		board[row][col] = "X" if p1Turn else "O"
-
-		flipPieces(board, row, col, ("X" if p1Turn else "O"))
-
-		if (p1Turn):
-			p1CantPlay = isGameOver(board, "X")
+	
+		winner = getWinner(board)
+		if (winner == "tie"):
+			print("It's a tie!")
+		elif (winner == "black"):
+			print(p1Name + " wins!")
+			winCounter[0] += 1
+		elif (winner == "white"):
+			print(p2Name + " wins!")
+			winCounter[1] += 1
 		else:
-			p2CantPlay = isGameOver(board, "O")
+			print("rip idek")
 
-		p1Turn = not p1Turn
+		again = input("Do you want to play again? ").lower()
+		while (again != "yes" and again != "no"):
+			print("Unrecognized input.")
+			again = input("Do you want to play again? ").lower()
 
-	printBoard(board)
+		if (again == "no"):
+			break
 
-	winner = getWinner(board)
-	if (winner == "tie"):
-		print("It's a tie!")
-	elif (winner == "white"):
-		print(p2Name + " wins!")
-	elif (winner == "black"):
-		print(p1Name + " wins!")
-	else:
-		print("rip idek")
+	print ("Player 1 has won " + winCounter[0] + " times, and Player 2 has won " + winCounter[1] + " times. Thanks for playing!")
 
 def checkDown(board, row, col, origin):
 	n = len(board)
@@ -78,7 +101,6 @@ def checkDown(board, row, col, origin):
 	return False
 
 def checkDownLeft(board, row, col, origin):
-	# subtract from the column, add to the row
 	n = len(board)
 	if (row == n - 1 or col == 0):
 		return False
@@ -94,7 +116,6 @@ def checkDownLeft(board, row, col, origin):
 	return False
 
 def checkDownRight(board, row, col, origin):
-	# add to the column and the row
 	n = len(board)
 	if (row == n - 1 or col == n - 1):
 		return False
@@ -155,7 +176,6 @@ def checkUp(board, row, col, origin):
 	return False
 
 def checkUpLeft(board, row, col, origin):
-	# subtract from the column and the row
 	n = len(board)
 	if (row == 0 or col == 0):
 		return False
@@ -171,7 +191,6 @@ def checkUpLeft(board, row, col, origin):
 	return False
 
 def checkUpRight(board, row, col, origin):
-	# add to the column, subtract from the row
 	n = len(board)
 	if (col == n - 1 or row == 0):
 		return False

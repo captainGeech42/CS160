@@ -69,7 +69,7 @@ def checkDown(board, row, col, origin):
 	char = board[row + 1][col]
 	if (char == origin or char == " "):
 		return False
-	for x in range(row + 1, n - row):
+	for x in range(row + 1, n):
 		char = board[x][col]
 		if (char == " "):
 			return False
@@ -131,7 +131,7 @@ def checkRight(board, row, col, origin):
 	char = board[row][col + 1]
 	if (char == origin or char == " "):
 		return False
-	for x in range(col + 2, n - col):
+	for x in range(col + 1, n):
 		char = board[row][x]
 		if (char == " "):
 			return False
@@ -222,13 +222,13 @@ def flipPieces(board, row, col, origin):
 	if (checkUpLeft(board, row, col, origin)):
 		inc = 1
 		while (row - inc >= 0 and col - inc >= 0 and board[row - inc][col - inc] != origin and board[row - inc][col - inc] != " "):
-			board[row - inc][col - 1] = origin
+			board[row - inc][col - inc] = origin
 			inc += 1
 
 	if (checkDownRight(board, row, col, origin)):
 		inc = 1
 		while (row + inc < n and col + inc < n and board[row + inc][col + inc] != origin and board[row + inc][col + inc] != " "):
-			board[row + 1][col + inc] = origin
+			board[row + inc][col + inc] = origin
 			inc += 1
 
 	if (checkUpRight(board, row, col, origin)):
